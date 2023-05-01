@@ -2,10 +2,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_smart_home/src/injector.dart';
+import 'package:flutter_smart_home/src/presentation/provider/global_provider.dart';
 import 'package:flutter_smart_home/temperature.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    const Injector(
+      router: MyApp(),
+
+    )
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -18,8 +26,53 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.indigo,
       ),
-      home: const HomePage(),
+      home: const TestPage(),
       debugShowCheckedModeBanner: false,
+    );
+  }
+}
+
+class TestPage extends StatefulWidget {
+  const TestPage({Key? key}) : super(key: key);
+
+  @override
+  _TestPageState createState() => _TestPageState();
+}
+
+class _TestPageState extends State<TestPage> {
+  late GlobalProvider globalProvider;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      globalProvider = GlobalProvider.of(context, listen: false);
+      globalProvider.getMovieQuote();
+    });
+    super.initState();
+  }
+
+  Future getMovieQuote() async {
+    globalProvider.getRandomMovieQuote;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final quote = context.watch<GlobalProvider>().randomQuote.quote;
+    // debugPrint('quote: $quote');
+    return Scaffold(
+      backgroundColor: Colors.indigo.shade50,
+      body: SafeArea(
+        child: Container(
+          margin: const EdgeInsets.only(top: 18, left: 24, right: 24),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(quote)
+            ]
+          ),
+        ),
+      ),
     );
   }
 }
