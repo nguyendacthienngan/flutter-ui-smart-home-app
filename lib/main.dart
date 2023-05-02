@@ -11,7 +11,6 @@ void main() {
   runApp(
     const Injector(
       router: MyApp(),
-
     )
   );
 }
