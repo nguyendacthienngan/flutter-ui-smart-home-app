@@ -38,6 +38,8 @@ dependencies:
   dartz: ^0.10.1
   http: ^0.13.5
   provider: ^6.0.5
+  firebase_core: ^2.10.0
+  firebase_database: ^10.1.1
 
 dev_dependencies:
   flutter_test:

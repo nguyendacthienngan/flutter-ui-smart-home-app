@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -7,7 +8,14 @@ import 'package:flutter_smart_home/src/presentation/provider/global_provider.dar
 import 'package:flutter_smart_home/temperature.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+import 'firebase_options.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(
     const Injector(
       router: MyApp(),
@@ -46,6 +54,7 @@ class _TestPageState extends State<TestPage> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       globalProvider = GlobalProvider.of(context, listen: false);
       globalProvider.getMovieQuote();
+      globalProvider.getSensorData();
     });
     super.initState();
   }
@@ -57,7 +66,8 @@ class _TestPageState extends State<TestPage> {
   @override
   Widget build(BuildContext context) {
     final quote = context.watch<GlobalProvider>().randomQuote.quote;
-    // debugPrint('quote: $quote');
+    final tempData = context.watch<GlobalProvider>().temperatureData;
+    final humData = context.watch<GlobalProvider>().humidityData;
     return Scaffold(
       backgroundColor: Colors.indigo.shade50,
       body: SafeArea(
@@ -67,7 +77,9 @@ class _TestPageState extends State<TestPage> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(quote)
+              Text(tempData.toString()),
+              Text(humData.toString())
+
             ]
           ),
         ),
