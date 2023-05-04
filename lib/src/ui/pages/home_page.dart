@@ -1,4 +1,5 @@
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_home/src/ui/pages/temperature_page.dart';
 
@@ -10,9 +11,22 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  // Sign user out method
+  void signUserOut() {
+    FirebaseAuth.instance.signOut();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        actions: [
+          IconButton(
+              onPressed: signUserOut,
+              icon: const Icon(Icons.logout)
+          )
+        ],
+      ),
       backgroundColor: Colors.indigo.shade50,
       body: SafeArea(
         child: Container(
