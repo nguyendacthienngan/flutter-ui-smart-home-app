@@ -15,18 +15,12 @@ class _HomePageState extends State<HomePage> {
   void signUserOut() {
     FirebaseAuth.instance.signOut();
   }
+  
+  final user = FirebaseAuth.instance.currentUser!;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-              onPressed: signUserOut,
-              icon: const Icon(Icons.logout)
-          )
-        ],
-      ),
       backgroundColor: Colors.indigo.shade50,
       body: SafeArea(
         child: Container(
@@ -37,22 +31,21 @@ class _HomePageState extends State<HomePage> {
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
+                children: [
                   Text(
-                    'HI JOHN',
-                    style: TextStyle(
+                    "Hi ${user.email}",
+                    style: const TextStyle(
                       fontSize: 18,
                       color: Colors.indigo,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  RotatedBox(
-                    quarterTurns: 135,
-                    child: Icon(
-                      Icons.bar_chart_rounded,
-                      color: Colors.indigo,
-                      size: 28,
-                    ),
+                  IconButton(
+                      onPressed: signUserOut,
+                      icon: const Icon(
+                        Icons.logout,
+                        color: Colors.indigo,
+                      )
                   )
                 ],
               ),
