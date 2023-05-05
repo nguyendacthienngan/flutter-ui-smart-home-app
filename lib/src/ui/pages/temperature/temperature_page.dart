@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_home/src/ui/pages/temperature/components/my_select_button.dart';
+import 'package:flutter_smart_home/src/ui/pages/temperature/components/my_slider.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
 
@@ -19,9 +20,16 @@ class _TemperaturePageState extends State<TemperaturePage> {
   double temperature = 26;
   double lightControl = 0;
   bool isChangeData = false;
-  String currentState = 'GENERAL';
-  bool isActiveGeneral = false;
-  bool isActiveServices = false;
+
+  void enableChangingData(title) {
+    setState(() {
+      isChangeData = title == 'SERVICES';
+    });
+  }
+
+  void updateData() {
+    // globalProvider.setData(desPath, value)
+  }
 
 
   @override
@@ -98,90 +106,20 @@ class _TemperaturePageState extends State<TemperaturePage> {
                       ),
                     ),
                     const SizedBox(height: 32),
-                    MySelectButton(),
+                    MySelectButton(enableChangingData: enableChangingData),
                     const SizedBox(height: 32),
-                    Container(
-                      padding: const EdgeInsets.symmetric(vertical: 18),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 24),
-                            child: Text(
-                              'LIGHT',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          Slider(
-                            value: lightControl,
-                            onChanged: (newHeating) {
-                              if (isChangeData) {
-                                setState(() => lightControl = newHeating);
-                              }
-                            },
-                            max: 100,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 24),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: const [
-                                Text('0%'),
-                                Text('50%'),
-                                Text('100%'),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
+                    MySlider(
+                        value: 20,
+                        isEnableChangeData: isChangeData,
+                        title: 'LIGHT',
+                        scale: const [Text('0%'), Text('50%'), Text('100%')]
                     ),
                     const SizedBox(height: 24),
-                    Container(
-                      padding: const EdgeInsets.symmetric(vertical: 18),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 24),
-                            child: Text(
-                              'FAN SPEED',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          Slider(
-                            value: fanSpeed,
-                            onChanged: (newFan) {
-                              if (isChangeData) {
-                                setState(() => fanSpeed = newFan);
-                              }
-                            },
-                            max: 100,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 24),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: const [
-                                Text('LOW'),
-                                Text('MID'),
-                                Text('HIGH'),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
+                    MySlider(
+                        value: fanSpeed,
+                        isEnableChangeData: isChangeData,
+                        title: 'Fan Speed',
+                        scale: [Text('LOW'), Text('MID'), Text('HIGH')]
                     ),
                     const SizedBox(height: 24),
                     Row(

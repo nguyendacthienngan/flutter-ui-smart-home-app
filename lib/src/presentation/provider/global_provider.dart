@@ -47,6 +47,7 @@ class GlobalProvider extends ChangeNotifier {
       switch (refPath) {
         case "Temperature": {
           temperatureData = val as int;
+          print(temperatureData);
           break;
         }
         case "Humidity": {
