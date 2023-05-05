@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_home/src/ui/pages/temperature/components/my_select_button.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
 
-import '../../presentation/provider/global_provider.dart';
+import '../../../presentation/provider/global_provider.dart';
 
 class TemperaturePage extends StatefulWidget {
   const TemperaturePage({Key? key}) : super(key: key);
@@ -97,13 +98,7 @@ class _TemperaturePageState extends State<TemperaturePage> {
                       ),
                     ),
                     const SizedBox(height: 32),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        _roundedButton(title: 'GENERAL', isActive: true),
-                        _roundedButton(title: 'SERVICES'),
-                      ],
-                    ),
+                    MySelectButton(),
                     const SizedBox(height: 32),
                     Container(
                       padding: const EdgeInsets.symmetric(vertical: 18),
@@ -232,29 +227,6 @@ class _TemperaturePageState extends State<TemperaturePage> {
           ),
         ),
       ],
-    );
-  }
-
-  Widget _roundedButton({
-    required String title,
-    bool isActive = false,
-  }) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        vertical: 12,
-        horizontal: 32,
-      ),
-      decoration: BoxDecoration(
-        color: isActive ? Colors.indigo : Colors.transparent,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.indigo),
-      ),
-      child: Text(
-        title,
-        style: TextStyle(
-          color: isActive ? Colors.white : Colors.black,
-        ),
-      ),
     );
   }
 }
