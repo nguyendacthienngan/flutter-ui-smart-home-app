@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_home/src/injector.dart';
-import 'package:flutter_smart_home/src/ui/pages/auth_page.dart';
+import 'package:flutter_smart_home/src/ui/pages/authentication/auth_page.dart';
 import 'package:overlay_support/overlay_support.dart';
 
 import 'firebase_options.dart';

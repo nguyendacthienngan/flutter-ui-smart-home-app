@@ -4,7 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_home/src/data/models/push_notification_model.dart';
 import 'package:flutter_smart_home/src/ui/notification_badge.dart';
-import 'package:flutter_smart_home/src/ui/pages/temperature_page.dart';
+import 'package:flutter_smart_home/src/ui/pages/temperature/temperature_page.dart';
 import 'package:overlay_support/overlay_support.dart';
 
 Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {

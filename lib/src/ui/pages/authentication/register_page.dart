@@ -1,10 +1,10 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_home/src/ui/components/my_button.dart';
-import 'package:flutter_smart_home/src/ui/components/square_tile.dart';
+import 'package:flutter_smart_home/src/ui/pages/authentication/components/my_button.dart';
+import 'package:flutter_smart_home/src/ui/pages/authentication/components/square_tile.dart';
 
-import '../components/my_textfield.dart';
+import 'components/my_textfield.dart';
 
 class RegisterPage extends StatefulWidget {
   final Function()? onTap;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_home/src/ui/pages/login_page.dart';
-import 'package:flutter_smart_home/src/ui/pages/register_page.dart';
+import 'package:flutter_smart_home/src/ui/pages/authentication/login_page.dart';
+import 'package:flutter_smart_home/src/ui/pages/authentication/register_page.dart';
 
 class LoginOrRegisterPage extends StatefulWidget {
   const LoginOrRegisterPage({Key? key}) : super(key: key);
