@@ -6,3 +6,4 @@ class PushNotification {
   String? title;
   String? body;
 }
+

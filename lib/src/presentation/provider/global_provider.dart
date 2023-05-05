@@ -79,8 +79,8 @@ class GlobalProvider extends ChangeNotifier {
   }
 
 
-  Future<void> setData(String desPath, Map<String, Object?> value) async {
-    DatabaseReference ref = FirebaseDatabase.instance.ref(fireBaseUri + desPath);
+  Future<void> setData(Map<String, Object?> value) async {
+    DatabaseReference ref = FirebaseDatabase.instance.ref(fireBaseUri);
     // await ref.update({
     //   "123/age": 19,
     //   "123/address/line1": "1 Mountain View",

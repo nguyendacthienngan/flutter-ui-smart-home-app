@@ -2,11 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class MySlider extends StatefulWidget {
-  final List<Text> scale;
   final String title;
+  final String id;
   double value;
+  final double defaultValue;
   final bool isEnableChangeData;
-  MySlider({Key? key, required this.value, required this.isEnableChangeData, required this.title, required this.scale}) : super(key: key);
+  final Function({String? key, Object? value}) updateData;
+  final List<Text> scale;
+
+  MySlider({Key? key, required this.value, required this.isEnableChangeData, required this.title, required this.scale, required this.updateData, required this.id, required this.defaultValue}) : super(key: key);
 
   @override
   State<MySlider> createState() => _MySliderState();
@@ -14,6 +18,7 @@ class MySlider extends StatefulWidget {
 
 class _MySliderState extends State<MySlider> {
   double brightness = 1;
+
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +50,9 @@ class _MySliderState extends State<MySlider> {
                   state(() {
                     if (widget.isEnableChangeData) {
                       widget.value = val;
+                      if (widget.defaultValue != val) {
+                        widget.updateData(key: widget.id, value: val.toInt());
+                      }
                     }
                   });
                 },

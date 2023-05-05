@@ -27,8 +27,21 @@ class _TemperaturePageState extends State<TemperaturePage> {
     });
   }
 
-  void updateData() {
-    // globalProvider.setData(desPath, value)
+  void updateData({key = "", value = 2}) {
+    switch(key) {
+      case "LightControl": {
+        globalProvider.setData({
+          "LightControl": value
+        });
+        break;
+      }
+      case "FanSpeed": {
+        globalProvider.setData({
+          "FanSpeed": value
+        });
+        break;
+      }
+    }
   }
 
 
@@ -109,16 +122,22 @@ class _TemperaturePageState extends State<TemperaturePage> {
                     MySelectButton(enableChangingData: enableChangingData),
                     const SizedBox(height: 32),
                     MySlider(
-                        value: 20,
+                        id: "LightControl",
+                        value: lightControl,
+                        defaultValue: lightControl,
                         isEnableChangeData: isChangeData,
                         title: 'LIGHT',
-                        scale: const [Text('0%'), Text('50%'), Text('100%')]
+                        updateData: updateData,
+                        scale: const [Text('0%'), Text('50%'), Text('100%')],
                     ),
                     const SizedBox(height: 24),
                     MySlider(
-                        value: fanSpeed,
-                        isEnableChangeData: isChangeData,
+                        id: "FanSpeed",
                         title: 'Fan Speed',
+                        value: fanSpeed,
+                        defaultValue: fanSpeed,
+                        isEnableChangeData: isChangeData,
+                        updateData: updateData,
                         scale: [Text('LOW'), Text('MID'), Text('HIGH')]
                     ),
                     const SizedBox(height: 24),
