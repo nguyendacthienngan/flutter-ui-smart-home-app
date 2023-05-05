@@ -14,8 +14,14 @@ class TemperaturePage extends StatefulWidget {
 class _TemperaturePageState extends State<TemperaturePage> {
   late GlobalProvider globalProvider;
 
-  double fan = 15;
+  double fanSpeed = 15;
   double temperature = 26;
+  double lightControl = 0;
+  bool isChangeData = false;
+  String currentState = 'GENERAL';
+  bool isActiveGeneral = false;
+  bool isActiveServices = false;
+
 
   @override
   void initState() {
@@ -23,14 +29,16 @@ class _TemperaturePageState extends State<TemperaturePage> {
       globalProvider = GlobalProvider.of(context, listen: false);
       // globalProvider.getMovieQuote();
       globalProvider.getSensorData();
-      temperature = context.watch<GlobalProvider>().temperatureData.toDouble();
-      fan = context.watch<GlobalProvider>().fanSpeed.toDouble();
+
     });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    temperature = context.watch<GlobalProvider>().temperatureData.toDouble();
+    fanSpeed = context.watch<GlobalProvider>().fanSpeed.toDouble();
+    lightControl = context.watch<GlobalProvider>().lightControl.toDouble();
     return Scaffold(
       backgroundColor: Colors.indigo.shade50,
       body: SafeArea(
@@ -109,16 +117,18 @@ class _TemperaturePageState extends State<TemperaturePage> {
                           const Padding(
                             padding: EdgeInsets.symmetric(horizontal: 24),
                             child: Text(
-                              'HEATING',
+                              'LIGHT',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
                           Slider(
-                            value: temperature,
+                            value: lightControl,
                             onChanged: (newHeating) {
-                              setState(() => temperature = newHeating);
+                              if (isChangeData) {
+                                setState(() => lightControl = newHeating);
+                              }
                             },
                             max: 100,
                           ),
@@ -127,9 +137,9 @@ class _TemperaturePageState extends State<TemperaturePage> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: const [
-                                Text('0\u00B0'),
-                                Text('50\u00B0'),
-                                Text('100\u00B0'),
+                                Text('0%'),
+                                Text('50%'),
+                                Text('100%'),
                               ],
                             ),
                           )
@@ -156,11 +166,13 @@ class _TemperaturePageState extends State<TemperaturePage> {
                             ),
                           ),
                           Slider(
-                            value: fan,
+                            value: fanSpeed,
                             onChanged: (newFan) {
-                              setState(() => fan = newFan);
+                              if (isChangeData) {
+                                setState(() => fanSpeed = newFan);
+                              }
                             },
-                            max: 30,
+                            max: 100,
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 24),
