@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:provider/provider.dart';
+
+import '../../presentation/provider/global_provider.dart';
 
 class TemperaturePage extends StatefulWidget {
   const TemperaturePage({Key? key}) : super(key: key);
@@ -9,8 +12,23 @@ class TemperaturePage extends StatefulWidget {
 }
 
 class _TemperaturePageState extends State<TemperaturePage> {
-  double heating = 12;
+  late GlobalProvider globalProvider;
+
   double fan = 15;
+  double temperature = 26;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      globalProvider = GlobalProvider.of(context, listen: false);
+      // globalProvider.getMovieQuote();
+      globalProvider.getSensorData();
+      temperature = context.watch<GlobalProvider>().temperatureData.toDouble();
+      fan = context.watch<GlobalProvider>().fanSpeed.toDouble();
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,9 +52,9 @@ class _TemperaturePageState extends State<TemperaturePage> {
                       color: Colors.indigo,
                     ),
                   ),
-                  const RotatedBox(
-                    quarterTurns: 135,
-                    child: Icon(
+                  RotatedBox(
+                    quarterTurns: (temperature * 3.6).toInt(),
+                    child: const Icon(
                       Icons.bar_chart_rounded,
                       color: Colors.indigo,
                       size: 28,
@@ -54,9 +72,9 @@ class _TemperaturePageState extends State<TemperaturePage> {
                       lineWidth: 14,
                       percent: 0.75,
                       progressColor: Colors.indigo,
-                      center: const Text(
-                        '26\u00B0',
-                        style: TextStyle(
+                      center: Text(
+                        '$temperature\u00B0',
+                        style: const TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.bold,
                         ),
@@ -98,11 +116,11 @@ class _TemperaturePageState extends State<TemperaturePage> {
                             ),
                           ),
                           Slider(
-                            value: heating,
+                            value: temperature,
                             onChanged: (newHeating) {
-                              setState(() => heating = newHeating);
+                              setState(() => temperature = newHeating);
                             },
-                            max: 30,
+                            max: 100,
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -110,8 +128,8 @@ class _TemperaturePageState extends State<TemperaturePage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: const [
                                 Text('0\u00B0'),
-                                Text('15\u00B0'),
-                                Text('30\u00B0'),
+                                Text('50\u00B0'),
+                                Text('100\u00B0'),
                               ],
                             ),
                           )

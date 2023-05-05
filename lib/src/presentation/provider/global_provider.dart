@@ -7,12 +7,13 @@ import 'package:provider/provider.dart';
 class GlobalProvider extends ChangeNotifier {
   static const fireBaseUri = "/CNM/Hoang/";
   final GetRandomMovieQuote getRandomMovieQuote;
-  double temperatureData = 0.0;
-  double humidityData = 0.0;
+  int temperatureData = 0;
+  int humidityData = 0;
   int buzzerData = 0;
   int lightControl = 0;
   int lightMotion = 0;
   int motion = 0;
+  int fanSpeed = 0;
 
   GlobalProvider({required this.getRandomMovieQuote});
 
@@ -36,6 +37,7 @@ class GlobalProvider extends ChangeNotifier {
     getValueRef("LightControl");
     getValueRef("LightMotion");
     getValueRef("Motion");
+    getValueRef("FanSpeed");
   }
 
   void getValueRef(String refPath) {
@@ -44,11 +46,11 @@ class GlobalProvider extends ChangeNotifier {
       Object? val = event.snapshot.value;
       switch (refPath) {
         case "Temperature": {
-          temperatureData = val as double;
+          temperatureData = val as int;
           break;
         }
         case "Humidity": {
-          humidityData = val as double;
+          humidityData = val as int;
           break;
         }
         case "Buzzer": {
@@ -65,6 +67,10 @@ class GlobalProvider extends ChangeNotifier {
         }
         case "Motion": {
           motion = val as int;
+          break;
+        }
+        case "FanSpeed": {
+          fanSpeed = val as int;
           break;
         }
       }
