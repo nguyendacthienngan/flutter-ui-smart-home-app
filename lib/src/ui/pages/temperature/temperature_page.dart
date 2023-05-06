@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_home/src/ui/pages/temperature/components/MySwitch.dart';
 import 'package:flutter_smart_home/src/ui/pages/temperature/components/my_select_button.dart';
 import 'package:flutter_smart_home/src/ui/pages/temperature/components/my_slider.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -123,14 +124,11 @@ class _TemperaturePageState extends State<TemperaturePage> {
                     const SizedBox(height: 32),
                     MySelectButton(enableChangingData: enableChangingData),
                     const SizedBox(height: 32),
-                    MySlider(
-                        id: "LightControl",
+                    MySwitch(
+                        title: "Light control",
                         value: lightControl,
-                        defaultValue: lightControl,
-                        isEnableChangeData: isChangeData,
-                        title: 'LIGHT',
                         updateData: updateData,
-                        scale: const [Text('0%'), Text('50%'), Text('100%')],
+                        id: "LightControl"
                     ),
                     const SizedBox(height: 24),
                     MySlider(
@@ -143,15 +141,15 @@ class _TemperaturePageState extends State<TemperaturePage> {
                         scale: [Text('LOW'), Text('MID'), Text('HIGH')]
                     ),
                     const SizedBox(height: 24),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        _fan(title: 'FAN 1', isActive: true),
-                        _fan(title: 'FAN 2', isActive: false),
-                        _fan(title: 'FAN 3'),
-                      ],
-                    ),
-                    const SizedBox(height: 24),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //   children: [
+                    //     _fan(title: 'FAN 1', isActive: true),
+                    //     _fan(title: 'FAN 2', isActive: false),
+                    //     _fan(title: 'FAN 3'),
+                    //   ],
+                    // ),
+                    // const SizedBox(height: 24),
                   ],
                 ),
               ),

@@ -159,20 +159,20 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 30),
 
                 // Google + apple sign in button
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    // google button
-                    SquareTile(imagePath: "assets/images/google.png"),
-
-                    SizedBox(width: 10),
-
-                    // apple button
-                    SquareTile(imagePath: "assets/images/apple.png"),
-                  ],
-                ),
-
-                const SizedBox(height: 30),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: const [
+                //     // google button
+                //     SquareTile(imagePath: "assets/images/google.png"),
+                //
+                //     SizedBox(width: 10),
+                //
+                //     // apple button
+                //     SquareTile(imagePath: "assets/images/apple.png"),
+                //   ],
+                // ),
+                //
+                // const SizedBox(height: 30),
 
                 // Not a member? register now
                 Row(
