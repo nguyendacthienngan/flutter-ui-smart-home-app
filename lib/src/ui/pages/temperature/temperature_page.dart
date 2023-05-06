@@ -58,9 +58,11 @@ class _TemperaturePageState extends State<TemperaturePage> {
 
   @override
   Widget build(BuildContext context) {
-    temperature = context.watch<GlobalProvider>().temperatureData.toDouble();
-    fanSpeed = context.watch<GlobalProvider>().fanSpeed.toDouble();
-    lightControl = context.watch<GlobalProvider>().lightControl.toDouble();
+    setState(() {
+      temperature = context.watch<GlobalProvider>().temperatureData.toDouble();
+      fanSpeed = context.watch<GlobalProvider>().fanSpeed.toDouble();
+      lightControl = context.watch<GlobalProvider>().lightControl.toDouble();
+    });
     return Scaffold(
       backgroundColor: Colors.indigo.shade50,
       body: SafeArea(
@@ -145,7 +147,7 @@ class _TemperaturePageState extends State<TemperaturePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         _fan(title: 'FAN 1', isActive: true),
-                        _fan(title: 'FAN 2', isActive: true),
+                        _fan(title: 'FAN 2', isActive: false),
                         _fan(title: 'FAN 3'),
                       ],
                     ),

@@ -17,8 +17,6 @@ class MySlider extends StatefulWidget {
 }
 
 class _MySliderState extends State<MySlider> {
-  double brightness = 1;
-
 
   @override
   Widget build(BuildContext context) {
@@ -33,16 +31,32 @@ class _MySliderState extends State<MySlider> {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: Text(
-              widget.title,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    widget.title,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    widget.value.toString(),
+                    textAlign: TextAlign.right,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                )
+              ],
             ),
           ),
           StatefulBuilder(
             builder: (context, state) => Container(
               child: Slider(
+                activeColor: widget.isEnableChangeData? Colors.indigo : Colors.grey[300],
                 value: widget.value,
                 min: 0.0,
                 max: 100.0,
