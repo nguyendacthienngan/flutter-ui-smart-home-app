@@ -17,7 +17,7 @@ class _WaterPageState extends State<WaterPage> with TickerProviderStateMixin {
   late GlobalProvider globalProvider;
 
   double soil = 2;
-  double Triger = 0;
+  double trigger = 0;
 
   bool isChangeData = true;
 
@@ -100,8 +100,9 @@ class _WaterPageState extends State<WaterPage> with TickerProviderStateMixin {
               if (snapshot.hasError) {
                 // If we got an error
               } else if (snapshot.hasData) {
-                debugPrint('Triger: $Triger');
-                Triger = snapshot.data![0];
+                debugPrint('Triger: $trigger');
+                trigger = snapshot.data![0];
+                soil = snapshot.data![1];
 
                 // Extracting data from snapshot object
                 return Container(
@@ -135,7 +136,7 @@ class _WaterPageState extends State<WaterPage> with TickerProviderStateMixin {
                               // Lottie file and start the animation.
                               // print("Triger: $value");
 
-                              if (Triger != 0) {
+                              if (trigger != 0) {
                                 _controller
                                   ..duration = composition.duration
                                   ..forward();
@@ -149,12 +150,49 @@ class _WaterPageState extends State<WaterPage> with TickerProviderStateMixin {
                           physics: const BouncingScrollPhysics(),
                           children: [
                             const SizedBox(height: 32),
+                            Container(
+                              padding: const EdgeInsets.symmetric(vertical: 18),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                                    child: Row(
+                                      children:  [
+                                        const Expanded(
+                                          child: Text(
+                                            "Humidity in soil",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child:  Align(
+                                            alignment: Alignment.topRight,
+                                            child: Text(
+                                                soil.toString()
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 32),
                             MySwitch(
                                 title: "Water control",
-                                value: Triger,
+                                value: trigger,
                                 updateData: updateData,
                                 id: "Triger"
                             ),
+                            const SizedBox(height: 32),
                           ],
                         ),
                       ),
