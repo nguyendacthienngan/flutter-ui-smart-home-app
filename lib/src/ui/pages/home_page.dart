@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_home/src/data/models/push_notification_model.dart';
 import 'package:flutter_smart_home/src/ui/notification_badge.dart';
 import 'package:flutter_smart_home/src/ui/pages/temperature/temperature_page.dart';
+import 'package:flutter_smart_home/src/ui/pages/temperature/water_page.dart';
 import 'package:overlay_support/overlay_support.dart';
 
 Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -153,10 +154,6 @@ class _HomePageState extends State<HomePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         _cardMenu(
-                          icon: 'assets/images/energy.png',
-                          title: 'ENERGY',
-                        ),
-                        _cardMenu(
                           onTap: () {
                             Navigator.push(
                               context,
@@ -170,6 +167,18 @@ class _HomePageState extends State<HomePage> {
                           color: Colors.indigoAccent,
                           fontColor: Colors.white,
                         ),
+                        _cardMenu(
+                          icon: 'assets/images/water.png',
+                          title: 'WATER',
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const WaterPage(),
+                              ),
+                            );
+                          }
+                        )
                       ],
                     ),
                     const SizedBox(height: 28),
@@ -177,11 +186,11 @@ class _HomePageState extends State<HomePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         _cardMenu(
-                          icon: 'assets/images/water.png',
-                          title: 'WATER',
+                          icon: 'assets/images/energy-2.png',
+                          title: 'ENERGY',
                         ),
                         _cardMenu(
-                          icon: 'assets/images/entertainment.png',
+                          icon: 'assets/images/entertainment-2.png',
                           title: 'ENTERTAINMENT',
                         ),
                       ],
@@ -204,6 +213,10 @@ class _HomePageState extends State<HomePage> {
     Color color = Colors.white,
     Color fontColor = Colors.grey,
   }) {
+    if (onTap == null) {
+      color = const Color.fromARGB(255, 236, 236, 236);
+      fontColor = Colors.white;
+    }
     return GestureDetector(
       onTap: onTap,
       child: Container(
