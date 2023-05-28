@@ -21,7 +21,7 @@ class _TemperaturePageState extends State<TemperaturePage> {
   double temperature = 26;
   double lightControl = 0;
   double soil = 2;
-  double trigger = 0;
+  double Triger = 0;
 
   bool isChangeData = true;
 
@@ -51,9 +51,9 @@ class _TemperaturePageState extends State<TemperaturePage> {
         });
         break;
       }
-      case "Trigger": {
+      case "Triger": {
         globalProvider.setData({
-          "Trigger": value
+          "Triger": value
         });
         break;
       }
@@ -183,9 +183,9 @@ class _TemperaturePageState extends State<TemperaturePage> {
                             const SizedBox(height: 24),
                             // MySwitch(
                             //     title: "Watering tree",
-                            //     value: trigger,
+                            //     value: Triger,
                             //     updateData: updateData,
-                            //     id: "Trigger"
+                            //     id: "Triger"
                             // ),
                             const SizedBox(height: 24),
                             // MySlider(

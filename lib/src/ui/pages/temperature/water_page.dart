@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_home/src/ui/pages/temperature/components/MySwitch.dart';
+import 'package:lottie/lottie.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
 
@@ -12,13 +13,15 @@ class WaterPage extends StatefulWidget {
   _WaterPageState createState() => _WaterPageState();
 }
 
-class _WaterPageState extends State<WaterPage> {
+class _WaterPageState extends State<WaterPage> with TickerProviderStateMixin {
   late GlobalProvider globalProvider;
 
   double soil = 2;
-  double trigger = 0;
+  double Triger = 0;
 
   bool isChangeData = true;
+
+  late final AnimationController _controller;
 
   void enableChangingData(title) {
     setState(() {
@@ -28,28 +31,26 @@ class _WaterPageState extends State<WaterPage> {
 
   void updateData({key = "", value = 2}) {
     switch(key) {
-      case "LightControl": {
-        globalProvider.setData({
-          "LightControl": value
-        });
-        break;
-      }
-      case "FanControl": {
-        globalProvider.setData({
-          "FanControl": value
-        });
-        break;
-      }
       case "Soil": {
         globalProvider.setData({
           "Soil": value
         });
         break;
       }
-      case "Trigger": {
+      case "Triger": {
         globalProvider.setData({
-          "Trigger": value
+          "Triger": value
         });
+        print("Triger: $value");
+        if (value == 1) {
+          if (!_controller.isCompleted) {
+            _controller.forward();
+          } else {
+            _controller.repeat();
+          }
+        } else {
+          _controller.stop();
+        }
         break;
       }
     }
@@ -64,18 +65,21 @@ class _WaterPageState extends State<WaterPage> {
 
     });
     super.initState();
+    _controller = AnimationController(vsync: this);
   }
 
-  Future<double> getTempData() async {
-    return context.watch<GlobalProvider>().temperatureData.toDouble();
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
-  Future<double> getFanControl() async {
-    return context.watch<GlobalProvider>().fanControl.toDouble();
+  Future<double> getTrigerData() async {
+    return context.watch<GlobalProvider>().Triger.toDouble();
   }
 
-  Future<double> getLightControl() async {
-    return context.watch<GlobalProvider>().lightControl.toDouble();
+  Future<double> getSoilData() async {
+    return context.watch<GlobalProvider>().soilData.toDouble();
   }
 
   @override
@@ -88,18 +92,16 @@ class _WaterPageState extends State<WaterPage> {
           // Future that needs to be resolved
           // inorder to display something on the Canvas
           future: Future.wait([
-            getTempData(),
-            getFanControl(),
-            getLightControl()
+            getTrigerData(),
+            getSoilData()
           ]),
           builder: (context, AsyncSnapshot<List<double>> snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               if (snapshot.hasError) {
                 // If we got an error
               } else if (snapshot.hasData) {
-                debugPrint("data: ${snapshot.data}");
-
-                // debugPrint('data: $temperature');
+                debugPrint('Triger: $Triger');
+                Triger = snapshot.data![0];
 
                 // Extracting data from snapshot object
                 return Container(
@@ -122,6 +124,26 @@ class _WaterPageState extends State<WaterPage> {
                           )
                         ],
                       ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Lottie.asset(
+                            'assets/animation/watering-plants.json',
+                            controller: _controller,
+                            onLoaded: (composition) {
+                              // Configure the AnimationController with the duration of the
+                              // Lottie file and start the animation.
+                              // print("Triger: $value");
+
+                              if (Triger != 0) {
+                                _controller
+                                  ..duration = composition.duration
+                                  ..forward();
+                              }
+                            },
+                          ),
+                        ],
+                      ),
                       Expanded(
                         child: ListView(
                           physics: const BouncingScrollPhysics(),
@@ -129,9 +151,9 @@ class _WaterPageState extends State<WaterPage> {
                             const SizedBox(height: 32),
                             MySwitch(
                                 title: "Water control",
-                                value: trigger,
+                                value: Triger,
                                 updateData: updateData,
-                                id: "Trigger"
+                                id: "Triger"
                             ),
                           ],
                         ),

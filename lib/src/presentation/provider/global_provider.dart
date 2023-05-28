@@ -15,7 +15,7 @@ class GlobalProvider extends ChangeNotifier {
   int motion = 0;
   int fanControl = 0;
   int soilData = 0;
-  int trigger = 0;
+  int Triger = 0;
 
 
   GlobalProvider({required this.getRandomMovieQuote});
@@ -42,7 +42,7 @@ class GlobalProvider extends ChangeNotifier {
     // getValueRef("Motion");
     getValueRef("Hoang/", "FanControl");
     getValueRef("Truc/", "Soil");
-    getValueRef("Truc/", "Trigger");
+    getValueRef("Truc/", "Triger");
   }
 
   void getValueRef(String root, String refPath) {
@@ -55,13 +55,12 @@ class GlobalProvider extends ChangeNotifier {
           soilData = val as int;
           break;
         }
-        case "Trigger": {
-          trigger = val as int;
+        case "Triger": {
+          Triger = val as int;
           break;
         }
         case "Temperature": {
           temperatureData = val as int;
-          print(temperatureData);
           break;
         }
         case "Humidity": {
