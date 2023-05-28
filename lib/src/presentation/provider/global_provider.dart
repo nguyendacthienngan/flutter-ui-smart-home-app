@@ -5,7 +5,7 @@ import 'package:flutter_smart_home/src/domain/usecases/get_random_movie_quote.da
 import 'package:provider/provider.dart';
 
 class GlobalProvider extends ChangeNotifier {
-  static const fireBaseUri = "/CNM/Hoang/";
+  static const fireBaseUri = "/CNM/";
   final GetRandomMovieQuote getRandomMovieQuote;
   int temperatureData = 0;
   int humidityData = 0;
@@ -13,7 +13,10 @@ class GlobalProvider extends ChangeNotifier {
   int lightControl = 0;
   int lightMotion = 0;
   int motion = 0;
-  int fanSpeed = 0;
+  int fanControl = 0;
+  int soilData = 0;
+  int trigger = 0;
+
 
   GlobalProvider({required this.getRandomMovieQuote});
 
@@ -31,20 +34,31 @@ class GlobalProvider extends ChangeNotifier {
   }
 
   void getSensorData() {
-    getValueRef("Temperature");
-    getValueRef("Humidity");
-    getValueRef("Buzzer");
-    getValueRef("LightControl");
-    getValueRef("LightMotion");
-    getValueRef("Motion");
-    getValueRef("FanSpeed");
+    getValueRef("Hoang/", "Temperature");
+    // getValueRef("Humidity");
+    // getValueRef("Buzzer");
+    getValueRef("Hoang/", "LightControl");
+    // getValueRef("LightMotion");
+    // getValueRef("Motion");
+    getValueRef("Hoang/", "FanControl");
+    getValueRef("Truc/", "Soil");
+    getValueRef("Truc/", "Trigger");
   }
 
-  void getValueRef(String refPath) {
-    DatabaseReference databaseReference = FirebaseDatabase.instance.ref(fireBaseUri + refPath);
+  void getValueRef(String root, String refPath) {
+    DatabaseReference databaseReference = FirebaseDatabase.instance.ref(fireBaseUri + root + refPath);
     databaseReference.onValue.listen((DatabaseEvent event) {
       Object? val = event.snapshot.value;
+      notifyListeners();
       switch (refPath) {
+        case "Soil": {
+          soilData = val as int;
+          break;
+        }
+        case "Trigger": {
+          trigger = val as int;
+          break;
+        }
         case "Temperature": {
           temperatureData = val as int;
           print(temperatureData);
@@ -70,8 +84,8 @@ class GlobalProvider extends ChangeNotifier {
           motion = val as int;
           break;
         }
-        case "FanSpeed": {
-          fanSpeed = val as int;
+        case "FanControl": {
+          fanControl = val as int;
           break;
         }
       }

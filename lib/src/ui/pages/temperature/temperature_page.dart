@@ -17,14 +17,17 @@ class TemperaturePage extends StatefulWidget {
 class _TemperaturePageState extends State<TemperaturePage> {
   late GlobalProvider globalProvider;
 
-  double fanSpeed = 15;
+  double fanControl = 15;
   double temperature = 26;
   double lightControl = 0;
-  bool isChangeData = false;
+  double soil = 2;
+  double trigger = 0;
+
+  bool isChangeData = true;
 
   void enableChangingData(title) {
     setState(() {
-      isChangeData = title == 'SERVICES';
+      // isChangeData = title == 'SERVICES';
     });
   }
 
@@ -36,9 +39,21 @@ class _TemperaturePageState extends State<TemperaturePage> {
         });
         break;
       }
-      case "FanSpeed": {
+      case "FanControl": {
         globalProvider.setData({
-          "FanSpeed": value
+          "FanControl": value
+        });
+        break;
+      }
+      case "Soil": {
+        globalProvider.setData({
+          "Soil": value
+        });
+        break;
+      }
+      case "Trigger": {
+        globalProvider.setData({
+          "Trigger": value
         });
         break;
       }
@@ -50,111 +65,161 @@ class _TemperaturePageState extends State<TemperaturePage> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       globalProvider = GlobalProvider.of(context, listen: false);
-      // globalProvider.getMovieQuote();
       globalProvider.getSensorData();
 
     });
     super.initState();
   }
 
+  Future<double> getTempData() async {
+    return context.watch<GlobalProvider>().temperatureData.toDouble();
+  }
+
+  Future<double> getFanControl() async {
+    return context.watch<GlobalProvider>().fanControl.toDouble();
+  }
+
+  Future<double> getLightControl() async {
+    return context.watch<GlobalProvider>().lightControl.toDouble();
+  }
+
   @override
   Widget build(BuildContext context) {
-    setState(() {
-      temperature = context.watch<GlobalProvider>().temperatureData.toDouble();
-      fanSpeed = context.watch<GlobalProvider>().fanSpeed.toDouble();
-      lightControl = context.watch<GlobalProvider>().lightControl.toDouble();
-    });
     return Scaffold(
       backgroundColor: Colors.indigo.shade50,
       body: SafeArea(
-        child: Container(
-          margin: const EdgeInsets.only(top: 18, left: 24, right: 24),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Icon(
-                      Icons.arrow_back_ios,
-                      color: Colors.indigo,
-                    ),
-                  ),
-                  RotatedBox(
-                    quarterTurns: (temperature * 3.6).toInt(),
-                    child: const Icon(
-                      Icons.bar_chart_rounded,
-                      color: Colors.indigo,
-                      size: 28,
-                    ),
-                  )
-                ],
-              ),
-              Expanded(
-                child: ListView(
-                  physics: const BouncingScrollPhysics(),
-                  children: [
-                    const SizedBox(height: 32),
-                    CircularPercentIndicator(
-                      radius: 180,
-                      lineWidth: 14,
-                      percent: 0.75,
-                      progressColor: Colors.indigo,
-                      center: Text(
-                        '$temperature\u00B0',
-                        style: const TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
+        child: FutureBuilder(
+
+          // Future that needs to be resolved
+          // inorder to display something on the Canvas
+          future: Future.wait([
+            getTempData(),
+            getFanControl(),
+            getLightControl()
+          ]),
+          builder: (context, AsyncSnapshot<List<double>> snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasError) {
+                // If we got an error
+              } else if (snapshot.hasData) {
+                temperature = snapshot.data![0];
+                fanControl = snapshot.data![1];
+                lightControl = snapshot.data![2];
+                debugPrint("data: ${snapshot.data}");
+
+                // debugPrint('data: $temperature');
+
+                // Extracting data from snapshot object
+                return Container(
+                  margin: const EdgeInsets.only(top: 18, left: 24, right: 24),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Icon(
+                              Icons.arrow_back_ios,
+                              color: Colors.indigo,
+                            ),
+                          ),
+                          RotatedBox(
+                            quarterTurns: (temperature * 3.6).toInt(),
+                            child: const Icon(
+                              Icons.bar_chart_rounded,
+                              color: Colors.indigo,
+                              size: 28,
+                            ),
+                          )
+                        ],
+                      ),
+                      Expanded(
+                        child: ListView(
+                          physics: const BouncingScrollPhysics(),
+                          children: [
+                            const SizedBox(height: 32),
+                            CircularPercentIndicator(
+                              radius: 180,
+                              lineWidth: 14,
+                              percent: 0.75,
+                              progressColor: Colors.indigo,
+                              center: Text(
+                                '$temperature\u00B0',
+                                style: const TextStyle(
+                                  fontSize: 32,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 24),
+                            const Center(
+                              child: Text(
+                                'TEMPERATURE',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, color: Colors.black54),
+                              ),
+                            ),
+                            const SizedBox(height: 32),
+                            // MySelectButton(enableChangingData: enableChangingData),
+                            const SizedBox(height: 32),
+                            MySwitch(
+                                title: "Light control",
+                                value: lightControl,
+                                updateData: updateData,
+                                id: "LightControl"
+                            ),
+                            const SizedBox(height: 24),
+                            MySwitch(
+                                title: "Fan control",
+                                value: fanControl,
+                                updateData: updateData,
+                                id: "FanControl"
+                            ),
+                            const SizedBox(height: 24),
+                            // MySwitch(
+                            //     title: "Watering tree",
+                            //     value: trigger,
+                            //     updateData: updateData,
+                            //     id: "Trigger"
+                            // ),
+                            const SizedBox(height: 24),
+                            // MySlider(
+                            //     id: "Soil",
+                            //     title: 'Soil',
+                            //     value: soil,
+                            //     defaultValue: soil,
+                            //     isEnableChangeData: isChangeData,
+                            //     updateData: updateData,
+                            //     scale: [Text('LOW'), Text('MID'), Text('HIGH')]
+                            // ),
+                            const SizedBox(height: 24),
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            //   children: [
+                            //     _fan(title: 'FAN 1', isActive: true),
+                            //     _fan(title: 'FAN 2', isActive: false),
+                            //     _fan(title: 'FAN 3'),
+                            //   ],
+                            // ),
+                            // const SizedBox(height: 24),
+                          ],
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 24),
-                    const Center(
-                      child: Text(
-                        'TEMPERATURE',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.black54),
-                      ),
-                    ),
-                    const SizedBox(height: 32),
-                    MySelectButton(enableChangingData: enableChangingData),
-                    const SizedBox(height: 32),
-                    MySwitch(
-                        title: "Light control",
-                        value: lightControl,
-                        updateData: updateData,
-                        id: "LightControl"
-                    ),
-                    const SizedBox(height: 24),
-                    MySlider(
-                        id: "FanSpeed",
-                        title: 'Fan Speed',
-                        value: fanSpeed,
-                        defaultValue: fanSpeed,
-                        isEnableChangeData: isChangeData,
-                        updateData: updateData,
-                        scale: [Text('LOW'), Text('MID'), Text('HIGH')]
-                    ),
-                    const SizedBox(height: 24),
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //   children: [
-                    //     _fan(title: 'FAN 1', isActive: true),
-                    //     _fan(title: 'FAN 2', isActive: false),
-                    //     _fan(title: 'FAN 3'),
-                    //   ],
-                    // ),
-                    // const SizedBox(height: 24),
-                  ],
-                ),
-              ),
-            ],
-          ),
+                    ],
+                  ),
+                );
+              }
+            }
+            // Displaying LoadingSpinner to indicate waiting state
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          },
         ),
       ),
     );
